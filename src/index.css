@@ -1,0 +1,37 @@
+h2 {
+    font-family: sans-serif, Arial;
+    text-align: center;
+    margin: 20px;
+}
+.task {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 3px 3px 5px #ccc;
+}
+
+#task-input {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 50%;
+}
+
+.remove-task {
+    background-color: #f00;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 20px;
+}
+
+.task-buttons button {
+    padding: 5px;
+    margin: 6px;
+}
