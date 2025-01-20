@@ -1,37 +1,115 @@
+/* General Styling */
 h2 {
     font-family: sans-serif, Arial;
     text-align: center;
     margin: 20px;
 }
+
+.tasks {
+  list-style: none;
+  padding: 0;
+}
+
 .task {
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    box-shadow: 3px 3px 5px #ccc;
+  display: flex;
+  justify-content: space-between; /* Ensures text is on the left and buttons are on the right */
+  align-items: center;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.3s, background-color 0.3s; /* Add smooth hover and background animations */
 }
 
-#task-input {
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 50%;
+/* Hover Animation */
+.task:hover {
+  transform: translateY(-5px); /* Move up slightly on hover */
+  background-color: #f9f9f9; /* Optional: light background on hover */
 }
 
-.remove-task {
-    background-color: #f00;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 20px;
+/* Task Checkbox */
+.task input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Checked Task */
+.task.checked {
+  color: #888; 
+}
+
+.task.checked .task-text {
+  text-decoration: line-through; 
+}
+
+/* Task Buttons Styling */
+.task-buttons {
+  display: flex;
+  gap: 8px; 
 }
 
 .task-buttons button {
-    padding: 5px;
-    margin: 6px;
+  padding: 5px;
+  margin: 0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Remove Button */
+.remove-task {
+  color: #fff;
+}
+
+.remove-task:hover {
+  background-color: #d00; 
+}
+
+/* Move Up Button */
+.move-task-up {
+  color: #fff;
+}
+
+.move-task-up:hover {
+  background-color: #0056b3;
+}
+
+/* Move Down Button */
+.move-task-down {
+  color: #fff;
+}
+
+.move-task-down:hover {
+  background-color: #1e7e34;
+}
+
+#task-input {
+    padding: 12px 16px; 
+    margin: 10px auto; 
+    border: 1px solid #ccc; 
+    border-radius: 8px;
+    width: 80%; 
+    font-size: 16px; 
+    outline: none; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    transition: all 0.3s ease; 
+}
+
+/* Hover Effect */
+#task-input:hover {
+    border-color: #888; 
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); 
+}
+
+/* Focus Effect */
+#task-input:focus {
+    border-color: #007bff; 
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2); 
+}
+
+/* Placeholder Styling */
+#task-input::placeholder {
+    color: #aaa; 
+    font-style: italic; 
 }
