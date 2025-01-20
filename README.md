@@ -32,12 +32,12 @@ A simple and interactive Todo List application built with **React**. This projec
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/todo-list-app.git
+   git clone https://github.com/aryala7/symmetrical-enigma
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd todo-list-app
+   cd symmetrical-enigma
    ```
 
 3. Install dependencies:
@@ -107,9 +107,6 @@ A simple and interactive Todo List application built with **React**. This projec
 
 ### Main View:
 ![Screenshot of Todo List](./screenshots/todo-list.png)
-
-### Completed Tasks:
-![Screenshot of Completed Tasks](./screenshots/completed-tasks.png)
 
 ---
 
