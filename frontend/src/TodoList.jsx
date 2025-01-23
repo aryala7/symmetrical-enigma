@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandPointUp, faXmark, faHandPointDown } from "@fortawesome/free-solid-svg-icons";
+import axios from 'axios'
+
 
 function TodoList() {
+
   const [tasks, setTasks] = useState([]);
+  axios.get(`http://localhost:5001`)
+      .then(res => {
+        const currentTasks = res.data;
+        setTasks(currentTasks);
+      })
+  
 
   const toggleCheckList = (index) => {
     setTasks((prevTasks) =>
