@@ -1,0 +1,46 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "5001:5000"
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - mongodb
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules  
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    command: npm run dev
+    depends_on:
+      - backend
+  mongodb:
+   image: mongo
+   container_name: mongodb
+   ports:
+      - "27017:27017"
+   volumes:
+      - mongo_data:/data/db
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/todo-db
+      ME_CONFIG_BASICAUTH: false
+volumes:
+  mongo_data:
+  frontend_node_modules:
