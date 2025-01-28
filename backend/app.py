@@ -27,12 +27,12 @@ def connect_to_mongo():
 todos = connect_to_mongo()
 
 def create_response(status:int ,message: str = "", data=None):
-    return jsonify({
-        "message":message,
-        "data":data
-    }),status
+    return jsonify(data),status
     
-    
+def check_database():
+    if not todos:
+        return jsonify({"error": "Database connection failed"}), 500
+        
 @app.route('/', methods=['GET'])
 def index():
     if todos is None:
@@ -48,12 +48,25 @@ def index():
 
 @app.route('/todos/create', methods=['POST'])
 def create_todo():
-    if not todos:
-        return jsonify({"error": "Database connection failed"}), 500
-    
+    # if todos in None:
+    #     return jsonify({"error": "Database connection failed"}), 500
     data = request.json
-    created_todo = todos.insert_one(data)
-    return create_response(201,"Todo created",created_todo)
+    required_fields = {"checked":bool,"task":str}
+    for field,expected_type in required_fields.items():
+        if field not in data:
+            return create_response(400,f"Missing required Field: '{field}'")
+        if not isinstance(data[field],expected_type):
+            return create_response(400,f"Field '{field}'must be of type '{expected_type.__name__}'")
+    try: 
+        created_todo = todos.insert_one(data)
+        inserted_id = created_todo.inserted_id
+        inserted_todo = todos.find_one({"_id":inserted_id})
+        inserted_todo['_id'] = str(inserted_todo['_id'])
+        logger.info(create_todo)
+        return create_response(201,"Todo created",inserted_todo)
+    except Exception as e:
+        return create_response(500,"Failed to create Todo",{"error":str(e)})
+
 
 
 if __name__ == "__main__":
