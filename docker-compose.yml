@@ -10,6 +10,7 @@ services:
       - ./backend:/app
     depends_on:
       - mongodb
+    command: flask run --host=0.0.0.0 --port=5000 --reload
   frontend:
     build:
       context: ./frontend
@@ -43,4 +44,3 @@ services:
       ME_CONFIG_BASICAUTH: false
 volumes:
   mongo_data:
-  frontend_node_modules:
