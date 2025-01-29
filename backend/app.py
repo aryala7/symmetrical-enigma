@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient,errors
 from dotenv import load_dotenv
+from bson import ObjectId
 import os
 import logging
 
@@ -33,7 +34,7 @@ def check_database():
     if not todos:
         return jsonify({"error": "Database connection failed"}), 500
         
-@app.route('/', methods=['GET'])
+@app.route('/todos', methods=['GET'])
 def index():
     if todos is None:
        return create_response(500,"Database connection failed!") 
@@ -67,7 +68,23 @@ def create_todo():
     except Exception as e:
         return create_response(500,"Failed to create Todo",{"error":str(e)})
 
-
+@app.route('/todos/delete', methods=['DELETE'])
+def delete_todo():
+    try:
+        data = request.json
+        logger.info(data,'this is my data',data['id'])
+        result = todos.delete_one({
+            "_id":ObjectId(data['id'])
+        })
+        if result.deleted_count > 0 :
+            return create_response(204,'Task deleted Successfully',{
+                "id":data['id']
+            })
+        return create_response(404,'No Task found with this Id',{
+            "id":data['id']
+        })
+    except Exception as e:
+        return create_response(500,"Failed to create Todo",{"error":str(e)})
 
 if __name__ == "__main__":
     port = os.getenv('PORT', 5000)
