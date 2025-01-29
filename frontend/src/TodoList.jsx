@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandPointUp, faXmark, faHandPointDown } from "@fortawesome/free-solid-svg-icons";
-import { getTodos } from "./api";
+import { createTodo, getTodos, removeTodo } from "./api";
 
 
 function TodoList() {
@@ -24,19 +24,30 @@ function TodoList() {
     );
   };
 
-  const addTask = (e) => {
+  const addTask = async (e) => {
     if (e.key !== "Enter") return;
-
     const taskInput = e.target.value.trim();
-    if (!taskInput) return;
-
+    if(!taskInput) return;
+    
     e.preventDefault();
-    setTasks((prevTasks) => [...prevTasks, { task: taskInput, checked: false }]);
-    e.target.value = ""; // Clear the input field
-  };
+    try { 
+      const newTask = await createTodo(taskInput)
+      setTasks((prevTasks) => [...prevTasks,newTask])
+      e.target.value=""
+    }catch(error) {
+        console.error("Failed to create Task:",error)
+    }
 
-  const removeTask = (indexToRemove) => {
-    setTasks((prevTasks) => prevTasks.filter((_, index) => index !== indexToRemove));
+  }
+
+  const removeTask = async (indexToRemove,id) => {
+    try {
+        await removeTodo(id);
+        setTasks((prevTasks) => prevTasks.filter((_, index) => index !== indexToRemove));
+    }catch(error) {
+      console.log("Failed to remove Task:",error)
+    }
+   
   };
 
   const moveTaskUp = (index) => {
@@ -60,6 +71,7 @@ function TodoList() {
   };
 
   const renderTasks = () =>
+
     tasks.map((task, index) => (
       <li
         className={`task ${task.checked ? "checked" : ""}`}
@@ -70,7 +82,7 @@ function TodoList() {
           <input
             type="checkbox"
             className="task-checkbox"
-            checked={task.checked}
+            checked={task.checked}  
             readOnly
           />
           <span className="task-text">{task.task}</span>
@@ -80,7 +92,7 @@ function TodoList() {
             className="remove-task"
             onClick={(e) => {
               e.stopPropagation(); // Prevent toggling the task on button click
-              removeTask(index);
+              removeTask(index,task._id);
             }}
           >
             <FontAwesomeIcon icon={faXmark} />
