@@ -72,7 +72,6 @@ def create_todo():
 def delete_todo():
     try:
         data = request.json
-        logger.info(data,'this is my data',data['id'])
         result = todos.delete_one({
             "_id":ObjectId(data['id'])
         })
@@ -85,6 +84,27 @@ def delete_todo():
         })
     except Exception as e:
         return create_response(500,"Failed to create Todo",{"error":str(e)})
+
+@app.route('/todos/checked', methods=['PUT'])
+def checked_todo():
+    try:
+        data = request.json
+        task_id = data.get('id')
+        
+        if not task_id:
+            return create_response(400, "Task ID is required")
+        
+        task = todos.find_one({"_id": ObjectId(task_id)})
+        
+        if not task:
+            return create_response(404, "Task not found")
+        
+        updated_value = not task.get('checked', False)
+        todos.update_one({"_id": ObjectId(task_id)}, {"$set": {"checked": updated_value}})
+        
+        return create_response(200, "Task updated", {"id": task_id, "checked": updated_value})
+    except Exception as e:
+        return create_response(500, "Failed to update task. Please contact support.", {"error": str(e)})
 
 if __name__ == "__main__":
     port = os.getenv('PORT', 5000)

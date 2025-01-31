@@ -7,7 +7,7 @@ export const getTodos = async () => {
 }
 
 export const createTodo = async (task) => {
-    const url = API_URL + '/create';
+    const url = generateUrl('create')
     const response = (await axios.post(url,
         {'task':task,checked:false,},
         {headers: {'Content-Type': 'application/json'}}
@@ -16,10 +16,23 @@ export const createTodo = async (task) => {
 }
 
 export const removeTodo = async (id) => {
-    const url = API_URL + '/delete'
+    const url = generateUrl('delete')
     const response = (await axios.delete(url,{
         data:{id:id},
         headers: {'Content-Type': 'application/json'}
     }))
     return response.data
+}
+
+export const checkedTodo = async(id) => {
+    const url = generateUrl('checked')
+    const response = (await axios.put(url,
+        {'id':id},
+        {headers:{'Content-Type':'application/json'}}
+    ))
+    return response.data
+}
+
+const generateUrl = (postfix) => {
+    return `${API_URL}/${postfix}`;
 }

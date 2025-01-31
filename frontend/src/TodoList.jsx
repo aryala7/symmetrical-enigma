@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHandPointUp, faXmark, faHandPointDown } from "@fortawesome/free-solid-svg-icons";
-import { createTodo, getTodos, removeTodo } from "./api";
+import { createTodo, getTodos, removeTodo,checkedTodo } from "./api";
 
 
 function TodoList() {
@@ -16,12 +16,17 @@ function TodoList() {
     fetchTasks();
   },[])
   
-  const toggleCheckList = (index) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((task, i) =>
-        i === index ? { ...task, checked: !task.checked } : task
-      )
-    );
+  const toggleCheckList = async (id,index) => {
+    try {
+      const response = await checkedTodo(id)
+      setTasks((prevTasks) =>
+        prevTasks.map((task, i) =>
+          i === index ? { ...task, checked: !task.checked } : task
+        )
+      );
+    }catch(error) {
+      console.error("Failed to update the Task:",error)
+    }
   };
 
   const addTask = async (e) => {
@@ -76,7 +81,7 @@ function TodoList() {
       <li
         className={`task ${task.checked ? "checked" : ""}`}
         key={index}
-        onClick={() => toggleCheckList(index)}
+        onClick={() => toggleCheckList(task._id,index)}
       >
         <div className="task-info">
           <input
